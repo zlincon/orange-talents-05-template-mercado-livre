@@ -1,7 +1,5 @@
-package br.com.zupacademy.lincon.mercadolivre.controllers;
+package br.com.zupacademy.lincon.mercadolivre.cadastrousuario;
 
-import br.com.zupacademy.lincon.mercadolivre.dtos.UsuarioDTO;
-import br.com.zupacademy.lincon.mercadolivre.entities.Usuario;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

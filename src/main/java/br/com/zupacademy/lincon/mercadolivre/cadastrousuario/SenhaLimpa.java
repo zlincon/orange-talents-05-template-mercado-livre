@@ -1,4 +1,4 @@
-package br.com.zupacademy.lincon.mercadolivre.utils;
+package br.com.zupacademy.lincon.mercadolivre.cadastrousuario;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;

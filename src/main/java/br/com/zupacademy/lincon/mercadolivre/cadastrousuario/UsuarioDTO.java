@@ -1,9 +1,4 @@
-package br.com.zupacademy.lincon.mercadolivre.dtos;
-
-import br.com.zupacademy.lincon.mercadolivre.entities.Usuario;
-import br.com.zupacademy.lincon.mercadolivre.utils.SenhaLimpa;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+package br.com.zupacademy.lincon.mercadolivre.cadastrousuario;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +8,7 @@ import java.time.Instant;
 public class UsuarioDTO {
     @NotBlank
     @Email
+    @UnicValue(domainClass = Usuario.class, fieldName = "email")
     private String email;
     @Size(min = 6)
     @NotBlank

@@ -1,8 +1,5 @@
-package br.com.zupacademy.lincon.mercadolivre.entities;
+package br.com.zupacademy.lincon.mercadolivre.cadastrousuario;
 
-import br.com.zupacademy.lincon.mercadolivre.dtos.UsuarioDTO;
-import br.com.zupacademy.lincon.mercadolivre.utils.SenhaLimpa;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -29,8 +26,11 @@ public class Usuario {
         this.timestamp = Instant.now();
     }
 
-
     public UsuarioDTO toDTO() {
         return new UsuarioDTO(email, senha, timestamp);
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
