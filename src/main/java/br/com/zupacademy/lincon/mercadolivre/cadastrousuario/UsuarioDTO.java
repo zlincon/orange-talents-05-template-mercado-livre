@@ -1,5 +1,7 @@
 package br.com.zupacademy.lincon.mercadolivre.cadastrousuario;
 
+import br.com.zupacademy.lincon.mercadolivre.utils.UniqueValue;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -8,7 +10,7 @@ import java.time.Instant;
 public class UsuarioDTO {
     @NotBlank
     @Email
-    @UnicValue(domainClass = Usuario.class, fieldName = "email")
+    @UniqueValue(domainClass = Usuario.class, fieldName = "email")
     private String email;
     @Size(min = 6)
     @NotBlank
