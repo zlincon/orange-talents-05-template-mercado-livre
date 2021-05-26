@@ -45,10 +45,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/produtos/{id:[0-9]+}").permitAll()
+                .antMatchers("/api/produtos").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/produtos/{id:[0-9]+}").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .cors()
                 .and()
@@ -60,6 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+
+            http.headers().frameOptions().disable();
 
     }
 
