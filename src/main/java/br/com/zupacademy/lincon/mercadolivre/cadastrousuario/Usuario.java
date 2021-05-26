@@ -18,7 +18,11 @@ public class Usuario {
     private String senha;
     private Instant timestamp;
 
-    public Usuario(String email,@Valid @NotNull SenhaLimpa senhaLimpa) {
+    @Deprecated
+    public Usuario() {
+    }
+
+    public Usuario(String email, @Valid @NotNull SenhaLimpa senhaLimpa) {
         Assert.isTrue(StringUtils.hasLength(email), "email não pode ser em branco");
         Assert.notNull(senhaLimpa, "o objeto do tipo senha limpa não pode ser nulo");
         this.email = email;
@@ -32,5 +36,9 @@ public class Usuario {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getSenha() {
+        return senha;
     }
 }
