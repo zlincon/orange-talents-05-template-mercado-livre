@@ -87,6 +87,10 @@ public class Produto {
         this.imagens = imagens;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public boolean pertendeAoUsuario(Usuario dono) {
         return this.dono.equals(dono);
     }
