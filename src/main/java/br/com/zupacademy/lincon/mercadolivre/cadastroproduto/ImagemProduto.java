@@ -30,11 +30,7 @@ public class ImagemProduto {
         this.link = link;
     }
 
-    @Override
-    public String toString() {
-        return "ImagemProduto{" +
-                "id=" + id +
-                ", link='" + link + '\'' +
-                '}';
+    public String getLink() {
+        return link;
     }
 }

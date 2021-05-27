@@ -2,13 +2,11 @@ package br.com.zupacademy.lincon.mercadolivre.cadastroproduto;
 
 import br.com.zupacademy.lincon.mercadolivre.cadastrocategoria.Categoria;
 import br.com.zupacademy.lincon.mercadolivre.cadastrousuario.Usuario;
-import ch.qos.logback.core.util.COWArrayList;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +56,7 @@ public class Produto {
     public ProdutoOutputDTO toOutoutDTO() {
         return new ProdutoOutputDTO(id, nome, quantidade, descricao,
                 valor, categoria, dono,
-                caracteristicas, timestamp);
+                caracteristicas, timestamp, imagens);
     }
 
     public void associaImagens(Set<String> links) {
@@ -87,5 +85,9 @@ public class Produto {
 
     public void setImagens(Set<ImagemProduto> imagens) {
         this.imagens = imagens;
+    }
+
+    public boolean pertendeAoUsuario(Usuario dono) {
+        return this.dono.equals(dono);
     }
 }

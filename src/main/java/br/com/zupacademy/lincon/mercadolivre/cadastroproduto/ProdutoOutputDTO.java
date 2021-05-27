@@ -2,24 +2,13 @@ package br.com.zupacademy.lincon.mercadolivre.cadastroproduto;
 
 import br.com.zupacademy.lincon.mercadolivre.cadastrocategoria.Categoria;
 import br.com.zupacademy.lincon.mercadolivre.cadastrousuario.Usuario;
-import br.com.zupacademy.lincon.mercadolivre.exceptionhandlers.NegocioException;
-import br.com.zupacademy.lincon.mercadolivre.utils.UniqueValue;
 
-import javax.persistence.EntityManager;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ProdutoOutputDTO {
-    private  Long id;
+    private Long id;
     private String nome;
     private BigDecimal valor;
     private Integer quantidade;
@@ -28,12 +17,14 @@ public class ProdutoOutputDTO {
     private String categoria;
     private String dono;
     private OffsetDateTime timestamp;
+    private Set<ImagemProduto> imagens;
 
     public ProdutoOutputDTO(Long id, String nome, Integer quantidade,
                             String descricao, BigDecimal valor, Categoria categoria,
                             Usuario dono,
                             Set<CaracteristicaProduto> caracteristicas,
-                            OffsetDateTime timestamp) {
+                            OffsetDateTime timestamp,
+                            Set<ImagemProduto> imagens) {
         this.id = id;
         this.nome = nome;
         this.valor = valor;
@@ -43,6 +34,7 @@ public class ProdutoOutputDTO {
         this.categoria = categoria.getNome();
         this.dono = dono.getEmail();
         this.timestamp = timestamp;
+        this.imagens = imagens;
     }
 
     public Long getId() {
@@ -79,5 +71,9 @@ public class ProdutoOutputDTO {
 
     public OffsetDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public Set<ImagemProduto> getImagens() {
+        return imagens;
     }
 }

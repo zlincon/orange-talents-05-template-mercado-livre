@@ -4,6 +4,7 @@ import br.com.zupacademy.lincon.mercadolivre.cadastrousuario.Usuario;
 import br.com.zupacademy.lincon.mercadolivre.cadastrousuario.UsuarioRepository;
 import br.com.zupacademy.lincon.mercadolivre.exceptionhandlers.NegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
@@ -48,19 +49,27 @@ public class ProdutoController {
 
     @PostMapping("/{id}/imagens")
     @Transactional
-    public String adicionaImagens(@PathVariable("id") Long id, @Valid ImagensDTO request) {
+    public ResponseEntity<ProdutoOutputDTO> adicionaImagens(@PathVariable("id") Long id,
+                                                            @Valid ImagensDTO request) {
+        Usuario dono =
+                usuarioRepository.findByEmail("adm@adm.com").orElseThrow(() -> new NegocioException("Usuário não encontrado"));
         Set<String> links = uploaderFake.envia(request.getImagens());
-        System.out.println(links);
         Produto produto = manager.find(Produto.class, id);
 
         if (produto == null) {
             throw new NegocioException("O produto informado não existe");
         }
 
+        if (!produto.pertendeAoUsuario(dono)) {
+            throw new NegocioException("Usuário " +
+                    "não é dono deste produto", HttpStatus.FORBIDDEN);
+        }
+
+
         produto.associaImagens(links);
 
         manager.merge(produto);
 
-        return produto.toString();
+        return ResponseEntity.ok(produto.toOutoutDTO());
     }
 }
