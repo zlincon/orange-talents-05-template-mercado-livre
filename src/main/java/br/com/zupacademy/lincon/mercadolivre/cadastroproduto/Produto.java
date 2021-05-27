@@ -67,28 +67,16 @@ public class Produto {
         this.imagens.addAll(imagens);
     }
 
-    @Override
-    public String toString() {
-        return "Produto{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", quantidade=" + quantidade +
-                ", descricao='" + descricao + '\'' +
-                ", valor=" + valor +
-                ", categoria=" + categoria.getNome() +
-                ", dono=" + dono.getEmail() +
-                ", caracteristicas=" + caracteristicas +
-                ", timestamp=" + timestamp +
-                ", imagens=" + imagens +
-                '}';
-    }
-
     public void setImagens(Set<ImagemProduto> imagens) {
         this.imagens = imagens;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Usuario getDono() {
+        return dono;
     }
 
     public boolean pertendeAoUsuario(Usuario dono) {
