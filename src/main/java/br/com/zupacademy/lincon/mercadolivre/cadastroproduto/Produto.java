@@ -1,6 +1,8 @@
 package br.com.zupacademy.lincon.mercadolivre.cadastroproduto;
 
 import br.com.zupacademy.lincon.mercadolivre.cadastrocategoria.Categoria;
+import br.com.zupacademy.lincon.mercadolivre.cadastroopiniao.Opiniao;
+import br.com.zupacademy.lincon.mercadolivre.cadastropergunta.Pergunta;
 import br.com.zupacademy.lincon.mercadolivre.cadastrousuario.Usuario;
 import org.springframework.util.Assert;
 
@@ -8,9 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -32,6 +32,11 @@ public class Produto {
     private OffsetDateTime timestamp = OffsetDateTime.now();
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<ImagemProduto> imagens = new HashSet<>();
+    @OneToMany(mappedBy = "produto")
+    @OrderBy("titulo asc")
+    private SortedSet<Pergunta> perguntas = new TreeSet<>();
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private List<Opiniao> opinioes = new ArrayList<>();
 
     @Deprecated
     public Produto() {
@@ -81,5 +86,13 @@ public class Produto {
 
     public boolean pertendeAoUsuario(Usuario dono) {
         return this.dono.equals(dono);
+    }
+
+    public List<Opiniao> getOpinioes() {
+        return opinioes;
+    }
+
+    public SortedSet<Pergunta> getPerguntas() {
+        return perguntas;
     }
 }

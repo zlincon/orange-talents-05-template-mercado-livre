@@ -18,6 +18,10 @@ public class Opiniao {
     @ManyToOne
     private Usuario consumidor;
 
+    @Deprecated
+    public Opiniao() {
+    }
+
     public Opiniao(int nota, String titulo, String descricao, Produto produto, Usuario consumidor) {
         this.nota = nota;
         this.titulo = titulo;
@@ -29,5 +33,17 @@ public class Opiniao {
     public OpiniaoOutputDTO toOutputDTO() {
         return new OpiniaoOutputDTO(nota, titulo, descricao, produto,
                 consumidor);
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public int getNota() {
+        return nota;
     }
 }

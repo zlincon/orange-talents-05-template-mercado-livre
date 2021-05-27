@@ -6,9 +6,10 @@ import br.com.zupacademy.lincon.mercadolivre.cadastrousuario.Usuario;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 @Entity
-public class Pergunta {
+public class Pergunta implements Comparable<Pergunta>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +22,10 @@ public class Pergunta {
     @ManyToOne
     private Produto produto;
     private OffsetDateTime timestamp;
+
+    @Deprecated
+    public Pergunta() {
+    }
 
     public Pergunta(String titulo, Usuario usuario, Produto produto) {
         this.titulo = titulo;
@@ -39,5 +44,14 @@ public class Pergunta {
 
     public  Usuario getDonoProduto() {
         return produto.getDono();
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    @Override
+    public int compareTo(Pergunta o) {
+        return this.titulo.compareTo(o.titulo);
     }
 }
