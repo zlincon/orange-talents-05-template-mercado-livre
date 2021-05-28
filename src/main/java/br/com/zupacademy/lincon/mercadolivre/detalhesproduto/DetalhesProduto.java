@@ -53,22 +53,6 @@ public class DetalhesProduto {
 
     }
 
-    public Set<Map<String, String>> getOpinioes() {
-        return opinioes;
-    }
-
-    public long getTotalOpinioes() {
-        return totalOpinioes;
-    }
-
-    public double getMediaNotass() {
-        return mediaNotas;
-    }
-
-    public Set<String> getPerguntas() {
-        return perguntas;
-    }
-
     public String getNome() {
         return nome;
     }
@@ -79,10 +63,6 @@ public class DetalhesProduto {
 
     public Integer getQuantidade() {
         return quantidade;
-    }
-
-    public Set<CaracteristicaProdutoDTO> getCaracteristicas() {
-        return caracteristicas;
     }
 
     public String getDescricao() {
@@ -97,8 +77,28 @@ public class DetalhesProduto {
         return dono;
     }
 
+    public Set<CaracteristicaProdutoDTO> getCaracteristicas() {
+        return caracteristicas;
+    }
+
     public OffsetDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public Set<Map<String, String>> getOpinioes() {
+        return opinioes;
+    }
+
+    public long getTotalOpinioes() {
+        return totalOpinioes;
+    }
+
+    public double getMediaNotas() {
+        return mediaNotas;
+    }
+
+    public Set<String> getPerguntas() {
+        return perguntas;
     }
 
     public Set<String> getLinksImagens() {

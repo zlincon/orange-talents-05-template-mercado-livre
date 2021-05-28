@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -94,5 +95,17 @@ public class Produto {
 
     public SortedSet<Pergunta> getPerguntas() {
         return perguntas;
+    }
+
+    public boolean abateEstoque(@Positive int quantidade) {
+        Assert.isTrue(quantidade > 0, "A quantidade deve ser maior que zero " +
+                "para abater o estoque. Quantidade repassada: "+quantidade);
+
+        if(quantidade <= this.quantidade) {
+            this.quantidade -= quantidade;
+            return true;
+        }
+
+        return false;
     }
 }
