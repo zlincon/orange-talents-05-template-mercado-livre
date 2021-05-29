@@ -2,6 +2,7 @@ package br.com.zupacademy.lincon.mercadolivre.fechamentocompra;
 
 import br.com.zupacademy.lincon.mercadolivre.cadastroproduto.Produto;
 import br.com.zupacademy.lincon.mercadolivre.cadastrousuario.Usuario;
+import br.com.zupacademy.lincon.mercadolivre.exceptionhandlers.NegocioException;
 import org.springframework.util.Assert;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -67,9 +68,15 @@ public class Compra {
 
     public void adicionaTransacao(@Valid RetornoFormaPagamento retornoFormaPagamento) {
         Transacao novaTransacao = retornoFormaPagamento.toTransacao(this);
+        if(this.transacoes.contains(novaTransacao)){
+            throw new NegocioException("Já existe uma transacao igual a essa processada "+novaTransacao);
+        }
         Assert.isTrue(!this.transacoes.contains(novaTransacao),
                 "Já existe uma transacao igual a essa processada "
                         + novaTransacao);
+        if(!transacoesConcluidasComSucesso().isEmpty()){
+            throw new NegocioException("Esta compra já foi concluída com sucesso");
+        }
         Assert.isTrue(transacoesConcluidasComSucesso().isEmpty(), "Essa compra já foi concluída com sucesso");
         this.transacoes.add(novaTransacao);
         this.statusCompra = StatusCompra.CONCLUIDA;
@@ -87,5 +94,18 @@ public class Compra {
 
         return transacoesConcluidasComSucesso;
 
+    }
+
+    @Override
+    public String toString() {
+        return "Compra{" +
+                "id=" + id +
+                ", produto=" + produto +
+                ", quantidade=" + quantidade +
+                ", comprador=" + comprador +
+                ", formaPagamento=" + formaPagamento +
+                ", statusCompra=" + statusCompra +
+                ", transacoes=" + transacoes +
+                '}';
     }
 }

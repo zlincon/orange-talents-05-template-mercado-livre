@@ -12,4 +12,12 @@ public class RankingNovaCompraDTO {
         this.idCompra = idCompra;
         this.idDonoProduto = idDonoProduto;
     }
+
+    @Override
+    public String toString() {
+        return "RankingNovaCompraDTO{" +
+                "idCompra=" + idCompra +
+                ", idDonoProduto=" + idDonoProduto +
+                '}';
+    }
 }

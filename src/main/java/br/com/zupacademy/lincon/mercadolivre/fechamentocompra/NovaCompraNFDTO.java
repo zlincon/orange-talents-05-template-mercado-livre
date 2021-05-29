@@ -12,4 +12,12 @@ public class NovaCompraNFDTO {
         this.idCompra = idCompra;
         this.idComprador = idComprador;
     }
+
+    @Override
+    public String toString() {
+        return "NovaCompraNFDTO{" +
+                "idCompra=" + idCompra +
+                ", idComprador=" + idComprador +
+                '}';
+    }
 }

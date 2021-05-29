@@ -87,6 +87,9 @@ public class FechamentoCompraController {
 
     private Compra processa(Long idCompra, RetornoFormaPagamento retornoFormaPagamento) {
         Compra compra = manager.find(Compra.class, idCompra);
+        if(compra == null) {
+            throw new NegocioException("Esta compra não existe");
+        }
         compra.adicionaTransacao(retornoFormaPagamento);
         manager.merge(compra);
         eventsNovaCompra.processa(compra);

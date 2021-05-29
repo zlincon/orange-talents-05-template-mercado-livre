@@ -11,13 +11,17 @@ public class SistemasInternosController {
 
     @PostMapping("/notas-fiscais")
     public void criaNota(@Valid @RequestBody NovaCompraNFDTO request) throws InterruptedException {
+        System.out.println("=====================================================================================");
         System.out.println("Criando nota: " + request);
+        System.out.println("=====================================================================================");
         Thread.sleep(150);
     }
 
     @PostMapping("/ranking")
     public void ranking(@Valid @RequestBody RankingNovaCompraDTO request) throws InterruptedException {
+        System.out.println("======================================================================================");
         System.out.println("Criando ranking: " + request);
+        System.out.println("======================================================================================");
         Thread.sleep(150);
     }
 

@@ -11,6 +11,7 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
+    @Enumerated(EnumType.STRING)
     private StatusTransacao status;
     private String idTransacaoGateway;
     @NotNull
@@ -34,5 +35,15 @@ public class Transacao {
 
     public boolean concluidaComSucesso() {
         return this.status.equals(StatusTransacao.SUCESSO);
+    }
+
+    @Override
+    public String toString() {
+        return "Transacao{" +
+                "id=" + id +
+                ", status=" + status +
+                ", idTransacaoGateway='" + idTransacaoGateway + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }
