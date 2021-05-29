@@ -6,6 +6,7 @@ import br.com.zupacademy.lincon.mercadolivre.cadastrousuario.Usuario;
 import br.com.zupacademy.lincon.mercadolivre.cadastrousuario.UsuarioRepository;
 import br.com.zupacademy.lincon.mercadolivre.exceptionhandlers.NegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
@@ -29,34 +30,40 @@ public class FechamentoCompraController {
     @Autowired
     private Emails emails;
 
-    @PostMapping("/api/compras")
+    @PostMapping("/api/v1/compras")
     @Transactional
     public ResponseEntity<String> compra(@RequestBody @Valid CompraDTO request,
-                                 UriComponentsBuilder uriComponentsBuilder) throws BindException {
+                                 UriComponentsBuilder uriComponentsBuilder) {
         Produto produto = manager.find(Produto.class, request.getIdProduto());
+
+        if(produto == null) {
+            throw new NegocioException("Produto não encontrado");
+        }
 
         int quantidade = request.getQuantidade();
         boolean abateu = produto.abateEstoque(quantidade);
 
         if(abateu) {
-            Usuario comprador = usuarioRepository.findByEmail("b.b.com")
+            Usuario comprador = usuarioRepository.findByEmail("b@b.com")
                     .orElseThrow(() -> new NegocioException("Usuario " +
                             "informado não encontrado"));
 
             FormaPagamento formaPagamento = request.getFormaPagamento();
 
             Compra compra = new Compra(produto, quantidade, comprador, formaPagamento);
-
+            manager.persist(compra);
             emails.sendNovaCompra(compra);
 
-            return ResponseEntity.ok(compra.urlRedirecionamento(uriComponentsBuilder));
+            return ResponseEntity.status(HttpStatus.FOUND).body(compra.urlRedirecionamento(uriComponentsBuilder));
+        }else{
+            throw new NegocioException("Não foi possível realizar a compra por conta do estoque");
         }
 
-        BindException problemaComEstoque = new BindException(request,
-                "compraRequest");
-        problemaComEstoque.reject(null, "Não foi possível realizar a compra " +
-                "por conta do estoque");
-
-        throw problemaComEstoque;
+//        BindException problemaComEstoque = new BindException(request,
+//                "compraRequest");
+//        problemaComEstoque.reject(null, "Não foi possível realizar a compra " +
+//                "por conta do estoque");
+//
+//        throw problemaComEstoque;
     }
 }

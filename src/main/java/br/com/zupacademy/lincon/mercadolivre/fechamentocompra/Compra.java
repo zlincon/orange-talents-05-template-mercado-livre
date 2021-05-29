@@ -20,16 +20,19 @@ public class Compra {
     private Produto produto;
     @Positive
     private int quantidade;
-    @NotNull @Valid
+    @NotNull @Valid @ManyToOne
     private Usuario comprador;
     @NotNull @Enumerated(EnumType.STRING)
     private FormaPagamento formaPagamento;
+    @Enumerated(EnumType.STRING)
+    private StatusCompra statusCompra;
 
     public Compra(Produto produto, int quantidade, Usuario comprador, FormaPagamento formaPagamento) {
         this.produto = produto;
         this.quantidade = quantidade;
         this.comprador = comprador;
         this.formaPagamento = formaPagamento;
+        this.statusCompra = StatusCompra.INICIADA;
     }
 
     public Produto getProduto() {

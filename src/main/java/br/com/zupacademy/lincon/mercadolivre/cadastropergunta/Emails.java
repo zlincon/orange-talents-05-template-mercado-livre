@@ -22,7 +22,7 @@ public class Emails {
         System.out.println("<body>...</body>");
         System.out.println("Subject: Nova compra...");
         System.out.println("NameFrom: " + compra.getComprador().getEmail());
-        System.out.println("From: comptras@ml.com");
+        System.out.println("From: compras@ml.com");
         System.out.println("To: " + compra.getProduto().getDono().getEmail());
         System.out.println("======================================");
     }

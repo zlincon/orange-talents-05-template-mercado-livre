@@ -9,7 +9,7 @@ public enum FormaPagamento {
                     .buildAndExpand(compra.getId())
                     .toString();
 
-            return "paypal.com/"+compra.getId()+"?redirectUrl="+uriRetornoPaypal;
+            return "paypal.com?buyerId="+compra.getId()+"&redirectUrl="+uriRetornoPaypal;
         }
     },
     pagseguro {
@@ -20,7 +20,7 @@ public enum FormaPagamento {
                     .buildAndExpand(compra.getId())
                     .toString();
 
-            return "pagseguro.com/"+compra.getId()+"?redirectUrl="+uriRetornoPaypal;
+            return "pagseguro.com?returnId="+compra.getId()+"&redirectUrl="+uriRetornoPaypal;
         }
     };
 
