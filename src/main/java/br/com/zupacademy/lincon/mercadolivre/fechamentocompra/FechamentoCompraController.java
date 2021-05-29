@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,20 +30,24 @@ public class FechamentoCompraController {
     @Autowired
     private Emails emails;
 
+    @Autowired
+    private EventsNovaCompra eventsNovaCompra;
+
+
     @PostMapping("/api/v1/compras")
     @Transactional
     public ResponseEntity<String> compra(@RequestBody @Valid CompraDTO request,
-                                 UriComponentsBuilder uriComponentsBuilder) {
+                                         UriComponentsBuilder uriComponentsBuilder) {
         Produto produto = manager.find(Produto.class, request.getIdProduto());
 
-        if(produto == null) {
+        if (produto == null) {
             throw new NegocioException("Produto não encontrado");
         }
 
         int quantidade = request.getQuantidade();
         boolean abateu = produto.abateEstoque(quantidade);
 
-        if(abateu) {
+        if (abateu) {
             Usuario comprador = usuarioRepository.findByEmail("b@b.com")
                     .orElseThrow(() -> new NegocioException("Usuario " +
                             "informado não encontrado"));
@@ -55,7 +59,7 @@ public class FechamentoCompraController {
             emails.sendNovaCompra(compra);
 
             return ResponseEntity.status(HttpStatus.FOUND).body(compra.urlRedirecionamento(uriComponentsBuilder));
-        }else{
+        } else {
             throw new NegocioException("Não foi possível realizar a compra por conta do estoque");
         }
 
@@ -65,5 +69,28 @@ public class FechamentoCompraController {
 //                "por conta do estoque");
 //
 //        throw problemaComEstoque;
+    }
+
+    @PostMapping("/retorno-pagseguro/{id}")
+    @Transactional
+    public ResponseEntity<String> processamentoPagSeguro(@PathVariable("id") Long idCompra,
+                                                         @RequestBody @Valid RetornoPagseguroRequest request) {
+        return ResponseEntity.ok(processa(idCompra, request).toString());
+    }
+
+    @PostMapping("/retorno-paypal/{id}")
+    @Transactional
+    public ResponseEntity<String> processamentoPaypal(@PathVariable("id") Long idCompra,
+                                                      @RequestBody @Valid RetornoPaypalRequest request) {
+        return ResponseEntity.ok(processa(idCompra, request).toString());
+    }
+
+    private Compra processa(Long idCompra, RetornoFormaPagamento retornoFormaPagamento) {
+        Compra compra = manager.find(Compra.class, idCompra);
+        compra.adicionaTransacao(retornoFormaPagamento);
+        manager.merge(compra);
+        eventsNovaCompra.processa(compra);
+
+        return compra;
     }
 }

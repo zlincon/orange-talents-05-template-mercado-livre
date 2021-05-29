@@ -1,5 +1,5 @@
 package br.com.zupacademy.lincon.mercadolivre.fechamentocompra;
 
-public enum StatusCompra {
-    INICIADA, CONCLUIDA;
+public enum StatusTransacao {
+    SUCESSO, ERRO
 }

@@ -2,13 +2,16 @@ package br.com.zupacademy.lincon.mercadolivre.fechamentocompra;
 
 import br.com.zupacademy.lincon.mercadolivre.cadastroproduto.Produto;
 import br.com.zupacademy.lincon.mercadolivre.cadastrousuario.Usuario;
-import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Compra {
@@ -16,16 +19,27 @@ public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull @Valid @ManyToOne
+    @NotNull
+    @Valid
+    @ManyToOne
     private Produto produto;
     @Positive
     private int quantidade;
-    @NotNull @Valid @ManyToOne
+    @NotNull
+    @Valid
+    @ManyToOne
     private Usuario comprador;
-    @NotNull @Enumerated(EnumType.STRING)
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private FormaPagamento formaPagamento;
     @Enumerated(EnumType.STRING)
     private StatusCompra statusCompra;
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.MERGE)
+    private Set<Transacao> transacoes = new HashSet<>();
+
+    @Deprecated
+    public Compra() {
+    }
 
     public Compra(Produto produto, int quantidade, Usuario comprador, FormaPagamento formaPagamento) {
         this.produto = produto;
@@ -49,5 +63,29 @@ public class Compra {
 
     public String urlRedirecionamento(UriComponentsBuilder uriComponentsBuilder) {
         return this.formaPagamento.criaUrlRetorno(this, uriComponentsBuilder);
+    }
+
+    public void adicionaTransacao(@Valid RetornoFormaPagamento retornoFormaPagamento) {
+        Transacao novaTransacao = retornoFormaPagamento.toTransacao(this);
+        Assert.isTrue(!this.transacoes.contains(novaTransacao),
+                "Já existe uma transacao igual a essa processada "
+                        + novaTransacao);
+        Assert.isTrue(transacoesConcluidasComSucesso().isEmpty(), "Essa compra já foi concluída com sucesso");
+        this.transacoes.add(novaTransacao);
+        this.statusCompra = StatusCompra.CONCLUIDA;
+    }
+
+    public boolean processadaComSucesso() {
+        return !transacoesConcluidasComSucesso().isEmpty();
+    }
+
+    private Set<Transacao> transacoesConcluidasComSucesso() {
+        Set<Transacao> transacoesConcluidasComSucesso = this.transacoes.stream()
+                .filter(Transacao::concluidaComSucesso).collect(Collectors.toSet());
+
+        Assert.isTrue(transacoesConcluidasComSucesso.size() <= 1, "Ops! Tem mais de uma transação concluída com sucesso para esta compra." + this.id);
+
+        return transacoesConcluidasComSucesso;
+
     }
 }
